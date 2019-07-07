@@ -48,20 +48,7 @@ for filename in glob.glob('G:\ImageCliff\TrainingSet_2_of_2\*.nii', recursive=Tr
     X.append(filename)
 
 for i in X:
-    i = image.load_img(i)
-plot_img(X[7])
-show()
+    i = i.get_data()
 
-base = keras.applications.inception_resnet_v2.InceptionResNetV2(include_top=False, weights='imagenet', input_tensor=None, input_shape=None, pooling=None, classes=2)
+print(X[7])
 
-BS = 48
-EPOCHS = 25
-x = base.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(1024, activation='relu')(x)
-predictions = Dense(2, activation='softmax')(x)
-model = Model(inputs=base.input, outputs=predictions)
-for layer in base.layers:
-    layer.trainable = True
-model.compile(optimizer=SGD(lr=0.01, momentum=0.9), loss='mean_squared_error', metrics=['mae', 'acc'])
-model.fit(X,y)
